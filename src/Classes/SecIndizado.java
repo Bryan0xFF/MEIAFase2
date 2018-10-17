@@ -9,6 +9,7 @@ import java.io.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -198,6 +199,15 @@ public class SecIndizado {
         return null;
     }
     
+    /**
+     * inserta ordenado
+     * @param datos
+     * @param datoInsertar
+     * @param nombreMaster
+     * @return
+     * @throws IOException
+     * @throws Exception 
+     */
     private List<String> SortToIndex(List<String> datos, String datoInsertar, String nombreMaster) throws IOException, Exception{
         
         //TODO: insertar en la ultima o en la primera posicion
@@ -242,6 +252,19 @@ public class SecIndizado {
                         
                         if (sig == -1) {
                         //insertar de ultimo
+                        datoAnterior[5] = datoAInsertar[0];
+                        datoAInsertar[5] = "-1";
+                        datos = SobreescribirALista(datos,datoAInsertar,datoLista,datoAnterior,Integer.parseInt(reg_init));
+                        flag = true;
+                        
+                        }if(count == 0 && datoAnterior.equals(null)){
+                            //es el primer dato
+                            //modificar desc_indice_lista
+                            datoAInsertar[5] = datoLista[0];
+                            datos = SobreescribirALista(datos, datoAInsertar, datoLista, null, Integer.parseInt(reg_init));
+                            List<String> datosDesc = ObtenerDatosDescIndice(nombreMaster);
+                            ModificarDescIndice(datos.get(datos.size() - 1), "lista_usuario", datos.size(), Integer.parseInt(datosDesc.get(1)), Integer.parseInt(datosDesc.get(2)));
+                            
                         }else{
                             //se toma el dato
                             datoAnterior = datoLista;
@@ -266,6 +289,18 @@ public class SecIndizado {
                         
                         if (sig == -1) {
                         //insertar de ultimo
+                        datoAnterior[5] = datoAInsertar[0];
+                        datoAInsertar[5] = "-1";
+                        datos = SobreescribirALista(datos,datoAInsertar,datoLista,datoAnterior,Integer.parseInt(reg_init));
+                        flag = true;
+                        }if(count == 0 && datoAnterior.equals(null)){
+                            //es el primer dato
+                            //modificar desc_indice_lista
+                            datoAInsertar[5] = datoLista[0];
+                            datos = SobreescribirALista(datos, datoAInsertar, datoLista, null, Integer.parseInt(reg_init));
+                            List<String> datosDesc = ObtenerDatosDescIndice(nombreMaster);
+                            ModificarDescIndice(datos.get(datos.size() - 1), "lista_usuario", datos.size(), Integer.parseInt(datosDesc.get(1)), Integer.parseInt(datosDesc.get(2)));
+                            
                         }else{
                             //se toma el dato
                             datoAnterior = datoLista;
@@ -291,6 +326,18 @@ public class SecIndizado {
                         
                         if (sig == -1) {
                         //insertar de ultimo
+                        datoAnterior[5] = datoAInsertar[0];
+                        datoAInsertar[5] = "-1";
+                        datos = SobreescribirALista(datos,datoAInsertar,datoLista,datoAnterior,Integer.parseInt(reg_init));
+                        flag = true;
+                        }if(count == 0 && datoAnterior.equals(null)){
+                            //es el primer dato
+                            //modificar desc_indice_lista
+                            datoAInsertar[5] = datoLista[0];
+                            datos = SobreescribirALista(datos, datoAInsertar, datoLista, null, Integer.parseInt(reg_init));
+                            List<String> datosDesc = ObtenerDatosDescIndice(nombreMaster);
+                            ModificarDescIndice(datos.get(datos.size() - 1), "lista_usuario", datos.size(), Integer.parseInt(datosDesc.get(1)), Integer.parseInt(datosDesc.get(2)));
+                            
                         }else{
                             //se toma el dato
                             datoAnterior = datoLista;
@@ -299,7 +346,15 @@ public class SecIndizado {
                         }
                 
             //el dato es menor. insertar    
-            }else{
+            }if(count == 0 && datoAnterior.equals(null)){
+                            //es el primer dato
+                            //modificar desc_indice_lista
+                            datoAInsertar[5] = datoLista[0];
+                            datos = SobreescribirALista(datos, datoAInsertar, datoLista, null, Integer.parseInt(reg_init));
+                            List<String> datosDesc = ObtenerDatosDescIndice(nombreMaster);
+                            ModificarDescIndice(datos.get(datos.size() - 1), "lista_usuario", datos.size(), Integer.parseInt(datosDesc.get(1)), Integer.parseInt(datosDesc.get(2)));
+                            
+                }else{
                 //actualiza apuntadores
                 datoAInsertar[5] = datoLista[0];
                 datoAnterior[5] = datoAInsertar[0];
@@ -318,6 +373,14 @@ public class SecIndizado {
         String[] datoActual = datos.get((reg_inicio - 1)).split("\\|");
     
         boolean flag = false;
+        
+        if (datoAnterior == null) {
+            //es el primer dato
+            datoInsertar[5] = datoSiguiente[0];
+            //setea el dato actual
+            String dato = Lista_Usuario.toFixedSizeString(datoInsertar);
+            datos.add(dato);
+        }
         
         while(flag == false){
             //primero verificamos el dato anterior
@@ -338,6 +401,8 @@ public class SecIndizado {
                         dato = Lista_Usuario.toFixedSizeString(datoSiguiente);
                         datos.set((siguiente - 1), dato);
                         
+                        dato = Lista_Usuario.toFixedSizeString(datoInsertar);
+                        datos.add(dato);
                         flag = true;
                     }
                     
@@ -350,5 +415,69 @@ public class SecIndizado {
         return datos;
     }
     
+    private boolean ModificarDescIndice(String numReg, String nombreMaster, int listaSize, int act, int inact) throws IOException{
+        
+        String path = "C:\\MEIA\\desc_indice" + nombreMaster + ".txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        String[] datosArray = (String[]) datos.toArray();
+        
+        String[] override = datosArray[1].trim().split(":");
+        override[1] = numReg;
+        
+        File file = new File(path);
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("Num_reg: " + listaSize);
+        bw.write("\r\n");
+        bw.write("Reg_inicio: " + override[1]);
+        bw.write("\r\n");
+        bw.write("reg_activos: "+ act);
+        bw.write("\r\n");
+        bw.write("Reg_inact: " + inact);
+            
+        bw.flush();
+        bw.close();
+        
+        return true;
+        
+    }
+    
+    /**
+     * 1. numero de Registros
+     * 2. numero activos
+     * 3. numero inactivos
+     * @param nombreMaster
+     * @return
+     * @throws IOException 
+     */
+    private List<String> ObtenerDatosDescIndice(String nombreMaster) throws IOException{
+        
+        String path = "C:\\MEIA\\desc_indice" + nombreMaster + ".txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        //obtenemos datos y cerramos buffer de datos
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        List<String> datosEnviar = new ArrayList<String>();
+        
+        for (int i = 0; i < datos.size(); i++) {
+            
+            if (i == 1) {
+                continue;
+            }
+            String[] temp = datos.get(i).trim().split(":");
+            datosEnviar.add(i, temp[1]);
+        }
+        
+        
+        return datosEnviar;
+    }
     
 }
