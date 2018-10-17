@@ -140,7 +140,7 @@ public class SecIndizado {
         return true;
     }
     
-    private static List<String> datosOrdenados(String datoInsertar, List<String> datos,String nombreMaster) throws IOException{
+    private static List<String> datosOrdenados(String datoInsertar, List<String> datos,String nombreMaster) throws IOException, Exception{
         
         //se abre un buffer hacia el desc_indice para saber donde comenzar a leer
         String pathIndice = "C:\\MEIA\\desc_indice_" + nombreMaster + ".txt";
@@ -164,19 +164,7 @@ public class SecIndizado {
             file = new File(pathIndice);
             fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
-            String[] numeroDescIndice = new String[datosDescIndice.size() -1];
-            
-            //setea los datos de desc_indice
-            for (int i = 0; i < datosDescIndice.size(); i++) {
-                String num = datosDescIndice.get(i).trim().split(":")[1];
-                numeroDescIndice[i] = num;
-            }
-            
-            numeroDescIndice[0] = "1";
-            numeroDescIndice[1] = "1";
-            numeroDescIndice[2] = "1";
-            numeroDescIndice[3] = "0";
-            
+                   
             bw.write("Num_reg: " + "1");
             bw.write("\r\n");
             bw.write("Reg_inicio: " + "1");
@@ -191,8 +179,7 @@ public class SecIndizado {
             
         }else{
             //ya se ha ingresado datos
-            
-            
+            SortToIndex(datos, datoInsertar, nombreMaster);
         }
         
         
@@ -208,7 +195,7 @@ public class SecIndizado {
      * @throws IOException
      * @throws Exception 
      */
-    private List<String> SortToIndex(List<String> datos, String datoInsertar, String nombreMaster) throws IOException, Exception{
+    private static List<String> SortToIndex(List<String> datos, String datoInsertar, String nombreMaster) throws IOException, Exception{
         
         //TODO: insertar en la ultima o en la primera posicion
         int count = 0;
@@ -367,7 +354,7 @@ public class SecIndizado {
         return datos;
     }
     
-    private List<String> SobreescribirALista(List<String> datos,String[]datoInsertar, String[] datoSiguiente, String[] datoAnterior, int reg_inicio){
+    private static List<String> SobreescribirALista(List<String> datos,String[]datoInsertar, String[] datoSiguiente, String[] datoAnterior, int reg_inicio){
         
         
         String[] datoActual = datos.get((reg_inicio - 1)).split("\\|");
@@ -415,7 +402,7 @@ public class SecIndizado {
         return datos;
     }
     
-    private boolean ModificarDescIndice(String numReg, String nombreMaster, int listaSize, int act, int inact) throws IOException{
+    private static boolean ModificarDescIndice(String numReg, String nombreMaster, int listaSize, int act, int inact) throws IOException{
         
         String path = "C:\\MEIA\\desc_indice" + nombreMaster + ".txt";
         FileReader fr = new FileReader(path);
@@ -456,7 +443,7 @@ public class SecIndizado {
      * @return
      * @throws IOException 
      */
-    private List<String> ObtenerDatosDescIndice(String nombreMaster) throws IOException{
+    private static List<String> ObtenerDatosDescIndice(String nombreMaster) throws IOException{
         
         String path = "C:\\MEIA\\desc_indice" + nombreMaster + ".txt";
         FileReader fr = new FileReader(path);
