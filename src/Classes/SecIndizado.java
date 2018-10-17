@@ -140,7 +140,7 @@ public class SecIndizado {
         return true;
     }
     
-    private static List<String> datosOrdenados(String datoInsertar, List<String> datos,String nombreMaster) throws IOException, Exception{
+    public static List<String> datosOrdenados(String datoInsertar, List<String> datos,String nombreMaster) throws IOException, Exception{
         
         //se abre un buffer hacia el desc_indice para saber donde comenzar a leer
         String pathIndice = "C:\\MEIA\\desc_indice_" + nombreMaster + ".txt";
