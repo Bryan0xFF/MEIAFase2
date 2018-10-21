@@ -293,21 +293,21 @@ public class RegisterForm extends javax.swing.JFrame {
                         selectedFile = new File(pathFoto);
                         ImageIO.write(image,"jpg",selectedFile);
                         newUser = new Usuario(tfUsuario.getText(), tfNombre.getText(), tfApellido.getText(),newUser.Encriptar(tfPassword.getText()), tfNacimiento.getText(), tfCorreo.getText(),Integer.valueOf(tfTelefono.getText()), pathFoto); 
-                        Path path = Paths.get("C:\\MEIA\\desc_Usuario" + ".txt");  
+                        Path path = Paths.get("C:\\MEIA\\desc_usuario" + ".txt");  
                          if(!Files.exists(path)) {
-                        secuencial = new Classes.Secuencial("Usuario",tfUsuario.getText() ,"5");
+                        secuencial = new Classes.Secuencial("usuario",tfUsuario.getText() ,"5");
                   
                         //formatear el archivo Usuario
                         newUser.setRol(1);
                         String add = newUser.setFixedSizeString();
-                        Classes.Secuencial.Escribir(add, "Usuario", newUser.getUsuario());
+                        Classes.Secuencial.Escribir(add, "usuario", newUser.getUsuario());
                         JOptionPane.showMessageDialog(null, "El usuario fue creado con éxito", "Notificación",WIDTH); 
                         } else {
-                        cadena = secuencial.Buscar(tfUsuario.getText(), "Usuario"); 
+                        cadena = secuencial.Buscar(tfUsuario.getText(), "usuario"); 
                         if (cadena == null) {
                             newUser.setRol(0);
                             String add = newUser.setFixedSizeString();
-                            Classes.Secuencial.Escribir(add, "Usuario", newUser.getUsuario());
+                            Classes.Secuencial.Escribir(add, "usuario", newUser.getUsuario());
                             JOptionPane.showMessageDialog(null, "El usuario fue creado con éxito", "Notificación",WIDTH);                             
                         }
                         else {

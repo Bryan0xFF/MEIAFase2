@@ -458,7 +458,45 @@ public class Secuencial {
         return true;
     }
     
-    
+    public static boolean BuscarBool(String idUsuario, String Master) throws IOException{
+          
+        boolean flag = false;
+        FileReader fr = new FileReader("C:\\MEIA\\" + Master + ".txt");
+        BufferedReader br = new BufferedReader(fr);
+        
+        String data = br.readLine();
+        
+        //se comienza buscando en master
+        while(data != null){
+            
+         String[] temp = data.trim().split("\\|");
+         Usuario tempUser = new Usuario(); 
+         String comparable = tempUser.fromFixedSizeString(temp[0]);
+         if(comparable.equals(idUsuario))
+            flag = true; 
+         data = br.readLine();
+        }
+        
+        br.close();
+        
+        //se busca en bitacora
+        fr = new FileReader("C:\\MEIA\\bitacora_" + Master + ".txt");
+        br = new BufferedReader(fr);
+        
+        data = br.readLine();
+        
+        while(data != null){
+            
+         String[] temp = data.trim().split("\\|");
+         Usuario tempUser = new Usuario(); 
+         String comparable = tempUser.fromFixedSizeString(temp[0]);
+         if(comparable.equals(idUsuario))
+            flag = true;
+         data = br.readLine();   
+        }
+        br.close();
+        return flag;
+    }
  
     
     public static String Buscar(String idUsuario, String Master)

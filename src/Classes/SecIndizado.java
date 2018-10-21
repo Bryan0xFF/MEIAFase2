@@ -29,7 +29,7 @@ public class SecIndizado {
      * @return
      * @throws IOException 
      */
-    public boolean CrearIndexado(String nombreMaster,
+    private boolean CrearIndexado(String nombreMaster,
             String nombreUsuarioMaster)throws IOException{
         
         CrearIndice(nombreMaster, nombreUsuarioMaster);
@@ -54,7 +54,7 @@ public class SecIndizado {
     
     
     
-    public boolean CrearIndice(String nombreMaster, String UsuarioAdmin)throws IOException{
+    private boolean CrearIndice(String nombreMaster, String UsuarioAdmin)throws IOException{
         File file = new File("C:\\MEIA\\indice_" + nombreMaster +".txt");
         boolean flag = file.createNewFile();
            
@@ -64,7 +64,7 @@ public class SecIndizado {
         //ALT+6 abrir action item
     }
     
-    public boolean CrearDescIndice(String nombreMaster) throws IOException{
+    private boolean CrearDescIndice(String nombreMaster) throws IOException{
         
         File file = new File("C:\\MEIA\\desc_Indice_" + nombreMaster +".txt");
         boolean flag = file.createNewFile();
@@ -84,7 +84,7 @@ public class SecIndizado {
         return flag;
     }
     
-    public boolean CrearDescMasterIndizado(String nombreMaster, String nombreAdminMaster) throws IOException{
+    private boolean CrearDescMasterIndizado(String nombreMaster, String nombreAdminMaster) throws IOException{
         
         File file = new File("C:\\MEIA\\desc_" + nombreMaster +".txt");
         boolean flag = file.createNewFile();
@@ -139,8 +139,17 @@ public class SecIndizado {
         
         return true;
     }
-    
-    public static List<String> datosOrdenados(String datoInsertar, List<String> datos,String nombreMaster) throws IOException, Exception{
+    /**
+     * datoInsertar ya viene normalizado
+     * 
+     * @param datoInsertar
+     * @param datos
+     * @param nombreMaster
+     * @return
+     * @throws IOException
+     * @throws Exception 
+     */
+    public static List<String> datosOrdenados(String datoInsertar,String nombreMaster) throws IOException, Exception{
         
         //se abre un buffer hacia el desc_indice para saber donde comenzar a leer
         String pathIndice = "C:\\MEIA\\desc_indice_" + nombreMaster + ".txt";
@@ -151,7 +160,20 @@ public class SecIndizado {
         String[] RegInicio = datosDescIndice.get(1).trim().split(":");
         br.close();
         
-        //no se ha ingresado ningun dato a la tabla
+        pathIndice = "C:\\MEIA\\" + nombreMaster + ".txt";
+        fr = new FileReader(pathIndice);
+        br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        //verifica si el usuario a ingresar existe en los archivos "usuario"
+        String[] usuarioVerificar = datoInsertar.split("\\|");
+        boolean flag = Secuencial.BuscarBool(usuarioVerificar[2], "usuario");
+        
+        
+        if (flag) {
+             //no se ha ingresado ningun dato a la tabla
         if (RegInicio[1].equals("0")) {
             //escribir como viene
             File file = new File("C:\\MEIA\\indice_" + nombreMaster + ".txt");
@@ -179,11 +201,13 @@ public class SecIndizado {
             
         }else{
             //ya se ha ingresado datos
-            SortToIndex(datos, datoInsertar, nombreMaster);
+             datos = SortToIndex(datos, datoInsertar, nombreMaster);
+        }
+        }else{
+            throw new Exception("No existe el usuario");
         }
         
-        
-        return null;
+        return datos;
     }
     
     /**
