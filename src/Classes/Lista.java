@@ -11,6 +11,8 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -27,7 +29,7 @@ public class Lista {
     
     //llave primaria compuesta por Nombre_lista y usuario
     
-    public Lista(String nombre_lista, Usuario usuario, String descripcion){
+    public Lista(String nombre_lista, Usuario usuario, String descripcion, String nombreAdmin) throws Exception{
         
         this.nombre_lista = nombre_lista;
         this.usuario = usuario.getUsuario();
@@ -45,7 +47,7 @@ public class Lista {
       this.fecha_creacion = today;
       
       
-      Escribir(this);
+      Escribir("lista", setFixedSize(),nombreAdmin);
     }
     
     private String ToFixedSizeString(String word, int count) {
@@ -80,31 +82,31 @@ public class Lista {
         
         return 138;
     }
-    
-    private void Escribir(Lista escribir){
+    /**
+     * dato normalizado
+     * @param nombreMaster 
+     */
+    private void Escribir(String nombreMaster, String datoIngresar, String nombreAdmin) throws IOException, Exception{
         //busca si existe un usuario con este nombre
         try{
+            boolean flag = true;
+            String path = "C:\\MEIA\\bitacora_" + nombreMaster + ".txt"; 
+            FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr);
             
-        Usuario temp = new Usuario();
-        temp.fromFixedSizeString(
-                Secuencial.Buscar(escribir.usuario, "lista"));
-        
-        
-        if (!escribir.usuario.equals(temp.getUsuario())) {
-            //el usuario no existe
-            Secuencial.Escribir(status, "lista", this.usuario);
+            List<String> datos = br.lines().collect(Collectors.toList());
+            String[] ingreso = datoIngresar.trim().split("\\|");
             
-        }else{
+            for (int i = 0; i < datos.size(); i++) {
+                
+                String[] datosSplit = datos.get(i).trim().split("\\|");
+                if (datosSplit[0].equals(ingreso[0]) && datosSplit[1].equals(ingreso[1])) {
+                    throw new Exception("ya existe la lista");
+                }
+            }
             
-            //el usuario existe y sobreescribe
-            int usuarios = Integer.parseInt(this.numero_usuarios);
-            usuarios = usuarios + 1;
-            this.numero_usuarios = Integer.toString(usuarios);
-            Secuencial.Sobreescribir(setFixedSize(),"lista", this.usuario,
-                    getSize());
+            Secuencial.Escribir(datoIngresar,"lista",nombreAdmin);
             
-        }
-        
         }catch(Exception e){
             e.printStackTrace();
         }

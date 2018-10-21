@@ -140,7 +140,7 @@ public class SecIndizado {
         return true;
     }
     /**
-     * datoInsertar ya viene normalizado
+     * datoInsertar ya viene normalizado de Lista_Usuario
      * 
      * @param datoInsertar
      * @param datos
