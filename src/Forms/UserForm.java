@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
  */
 public class UserForm extends javax.swing.JFrame {
 
-    public static Usuario usuario = new Usuario(); 
+    public Usuario usuario = new Usuario(); 
     File file; 
     BufferedImage image; 
     
