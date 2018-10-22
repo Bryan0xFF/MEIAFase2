@@ -22,19 +22,19 @@ import javax.swing.DefaultListModel;
  */
 public class Lista {
     
-    String nombre_lista;
-    String usuario;
-    String descripcion;
-    String numero_usuarios;
-    String fecha_creacion;
-    String status;
+   public String nombre_lista;
+   public String usuario;
+   public String descripcion;
+   public String numero_usuarios;
+   public String fecha_creacion;
+   public String status;
     
     //llave primaria compuesta por Nombre_lista y usuario
     
     
     public Lista() {
         
-    }
+    }    
     
     public Lista(String nombre_lista, Usuario usuario, String descripcion) throws Exception{
         
@@ -159,8 +159,56 @@ public class Lista {
         return datosEnviar;
     }
     
-        public static boolean SobreescribirLista
-        (String fixedSize, String id, String master, int tamanio,String usuario) throws IOException{
+    public static Lista ObtenerLista(String id, String name) throws IOException {
+        //se busca primero en la bitacora
+        String path = "C:\\MEIA\\bitacora_lista.txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        Lista datosEnviar = new Lista();
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+         for (int i = 0; i < datos.size(); i++) {
+             String trim = Classes.Usuario.fromFixedSizeString(datos.get(i)); 
+             String[] split = trim.split("\\|");
+             
+             if (split[0].equals(name) && split[1].equals(id)) {
+                 datosEnviar.nombre_lista = split[0];
+                 datosEnviar.usuario = split[1];
+                 datosEnviar.descripcion = split[2]; 
+                 datosEnviar.numero_usuarios = split[3]; 
+                 datosEnviar.fecha_creacion = split[4]; 
+                 datosEnviar.status = split[5];                  
+             }
+         }
+         
+         //se busca luego en Master
+          path = "C:\\MEIA\\lista.txt";
+          fr = new FileReader(path);
+          br = new BufferedReader(fr);
+          
+          datos = br.lines().collect(Collectors.toList());
+          br.close();
+          
+          for (int i = 0; i < datos.size(); i++) {
+             String trim = Classes.Usuario.fromFixedSizeString(datos.get(i)); 
+             String[] split = trim.split("\\|");
+             
+             if (split[0].equals(name) && split[1].equals(id)) {
+                 datosEnviar.nombre_lista = split[0];
+                 datosEnviar.usuario = split[1];
+                 datosEnviar.descripcion = split[2]; 
+                 datosEnviar.numero_usuarios = split[3]; 
+                 datosEnviar.fecha_creacion = split[4]; 
+                 datosEnviar.status = split[5];                  
+             }
+         }
+        return datosEnviar;
+    }
+    
+    public static boolean SobreescribirLista
+        (String fixedSize, String id, String master, int tamanio, String usuario) throws IOException{
         
          RandomAccessFile RAF = null;
          

@@ -6,13 +6,16 @@
 package Forms;
 
 import Classes.Lista;
+import Classes.Secuencial;
 import Classes.Usuario;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 
 /**
@@ -24,6 +27,7 @@ public class AddToListForm extends javax.swing.JFrame {
     Lista lista = new Lista(); 
     DefaultListModel allLists = new DefaultListModel();
     public Usuario user = new Usuario(); 
+    Secuencial secuencial = new Secuencial(); 
     
     public AddToListForm() {
         initComponents();
@@ -152,6 +156,29 @@ public class AddToListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        try {
+            String nombreLista = List.getSelectedValue();
+            String nombreAsociado = tfUsuario.getText();
+            Lista lista = new Lista();
+            Usuario asociado = new Usuario();
+            asociado = secuencial.ObtenerUsuario(nombreAsociado, "Usuario");
+            
+            if (asociado.getUsuario().equals(user)) {
+              lista = lista.ObtenerLista(user.getUsuario(), nombreLista);
+              lista.numero_usuarios = lista.numero_usuarios + 1;
+              String newFixedSize = lista.setFixedSize();
+              Classes.Lista.SobreescribirLista(newFixedSize, nombreLista, "lista", lista.getSize(),user.getUsuario());
+              //Agregar a lista usuario
+              JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " se ha agregado a la lista: " + nombreLista, "Agregar",WIDTH);  
+            }
+            else if (!asociado.equals(user)){
+              JOptionPane.showMessageDialog(null, "El usuario que desea agregar no existe", "Error",WIDTH);
+            }  
+        }
+        catch (IOException ex) {
+            Logger.getLogger(AddToListForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
