@@ -131,7 +131,7 @@ public class Lista_Usuario {
             for (int i = 0; i < datos.size(); i++) {
                 
                 String[] datosSplit = datos.get(i).trim().split("\\|");
-                if (datosSplit[0].equals(ingreso[0]) && datosSplit[1].equals(ingreso[1])) {
+                if (datosSplit[0].equals(ingreso[0]) && datosSplit[1].equals(ingreso[1]) && datosSplit[2].equals(ingreso[2])) {
                     throw new Exception("ya existe el usuario en esa lista");
                 }
             }

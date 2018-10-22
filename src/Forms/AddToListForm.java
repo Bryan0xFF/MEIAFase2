@@ -29,7 +29,8 @@ public class AddToListForm extends javax.swing.JFrame {
     DefaultListModel allLists = new DefaultListModel();
     public Usuario user = new Usuario(); 
     Secuencial secuencial = new Secuencial(); 
-    
+    String nombreAsociado = ""; 
+     String nombreLista = ""; 
     public AddToListForm() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -158,14 +159,17 @@ public class AddToListForm extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
-            String nombreLista = List.getSelectedValue();
-            String nombreAsociado = tfUsuario.getText();            
+            nombreLista = List.getSelectedValue();
+            nombreAsociado = tfUsuario.getText();            
             Usuario asociado = new Usuario();
             asociado = secuencial.ObtenerUsuario(nombreAsociado, "Usuario");
+            int count = 0; 
             
             if (asociado.getUsuario().equals(nombreAsociado)) {
               lista = lista.ObtenerLista(user.getUsuario(), nombreLista);
-              lista.numero_usuarios = lista.numero_usuarios + 1;
+              count = Integer.valueOf(lista.numero_usuarios);
+              count++; 
+              lista.numero_usuarios = String.valueOf(count);
               String newFixedSize = lista.setFixedSize();
               Classes.Lista.SobreescribirLista(newFixedSize, nombreLista, "lista", lista.getSize(),user.getUsuario());
               
@@ -179,6 +183,7 @@ public class AddToListForm extends javax.swing.JFrame {
         }
         catch (Exception ex) {
             Logger.getLogger(AddToListForm.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " ya existe en la lista: " + nombreLista, "Error",WIDTH);
         }
        
        
