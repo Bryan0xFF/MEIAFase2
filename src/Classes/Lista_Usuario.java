@@ -55,6 +55,10 @@ public class Lista_Usuario {
         return result+word;        
     }
     
+    /**
+     * este es para master
+     * @return 
+     */
     public String setFixedSizeString(){
         
         StringBuilder sb = new StringBuilder();
@@ -88,10 +92,27 @@ public class Lista_Usuario {
             if (i < (array.length - 1)) {
                sb.append("|");
             }
-
         }
         
         return sb.toString();
+    }
+    
+    /**
+     * este es para indice
+     * @param listaSize
+     * @param nombre_lista
+     * @param usuario
+     * @param usuarioAsociado
+     * @return 
+     */
+    
+    public String FillFixedSizeString(String word, int count) {
+    String result = ""; 	
+    int complement = count - word.length();
+      for(int i = 0; i < complement; i++) {
+	result += "&";
+      }
+        return result+word;        
     }
     
     public static String setData(int listaSize, String nombre_lista, String usuario,

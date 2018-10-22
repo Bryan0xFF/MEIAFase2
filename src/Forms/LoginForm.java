@@ -5,6 +5,7 @@
  */
 package Forms;
 
+import Classes.SecIndizado;
 import Classes.Secuencial;
 import Classes.Usuario;
 import static java.awt.image.ImageObserver.WIDTH;
@@ -21,6 +22,7 @@ public class LoginForm extends javax.swing.JFrame {
     
     
     Secuencial secuencial; 
+    SecIndizado secuencialIndex;
     public static Usuario newUser = new Usuario(); 
     
      
@@ -137,14 +139,14 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         
-        Secuencial secuencial = new Secuencial();       
         String user = tfUsuario.getText(); 
         String password = newUser.Encriptar(tfPassword.getText());
          
         try {            
         newUser = secuencial.ObtenerUsuario(user, "Usuario");
-          secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
-          secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
+        secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
+        //secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
+        secuencialIndex = new SecIndizado("lista_usuario", tfUsuario.getText());
           
             if(password.equals(newUser.getPassword()) && user.equals(newUser.getUsuario())) {                
              switch (newUser.getRol()) {

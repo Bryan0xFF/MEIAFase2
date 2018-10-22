@@ -39,21 +39,6 @@ public class SecIndizado {
         return false;
     }
     
-    public SecIndizado(String nombreMaster, String nombreUsuarioMaster){
-        
-        try{
-            
-            CrearIndexado(nombreMaster, nombreUsuarioMaster);
-            
-        }catch (Exception e){
-            
-            e.printStackTrace();
-        }
-        
-    }
-    
-    
-    
     private boolean CrearIndice(String nombreMaster, String UsuarioAdmin)throws IOException{
         File file = new File("C:\\MEIA\\indice_" + nombreMaster +".txt");
         boolean flag = file.createNewFile();
@@ -120,6 +105,25 @@ public class SecIndizado {
         return true;
     }
     
+    public SecIndizado(String nombreMaster, String nombreUsuarioMaster){
+        
+        try{
+            
+            CrearIndexado(nombreMaster, nombreUsuarioMaster);
+            
+        }catch (Exception e){
+            
+            e.printStackTrace();
+        }
+        
+    }
+   
+    public SecIndizado() {
+        
+    }
+    
+    
+    
     public static boolean EscribirIndizado(String nombreMaster, String nombreLista,
             String usuario, String usuarioAsociado) throws IOException{
         //TODO: Escribir al archivo modificando apuntadores, registros y desc. de ser necesario
@@ -152,15 +156,15 @@ public class SecIndizado {
     public static List<String> datosOrdenados(String datoInsertar,String nombreMaster) throws IOException, Exception{
         
         //se abre un buffer hacia el desc_indice para saber donde comenzar a leer
-        String pathIndice = "C:\\MEIA\\desc_indice_" + nombreMaster + ".txt";
-        FileReader fr = new FileReader(pathIndice);
+        String pathdescIndice = "C:\\MEIA\\desc_indice_" + nombreMaster + ".txt";
+        FileReader fr = new FileReader(pathdescIndice);
         BufferedReader br = new BufferedReader(fr);
         
         List<String> datosDescIndice = br.lines().collect(Collectors.toList());
-        String[] RegInicio = datosDescIndice.get(1).trim().split(":");
+        String[] RegInicio = datosDescIndice.get(1).trim().split(": ");
         br.close();
         
-        pathIndice = "C:\\MEIA\\" + nombreMaster + ".txt";
+        String pathIndice = "C:\\MEIA\\" + nombreMaster + ".txt";
         fr = new FileReader(pathIndice);
         br = new BufferedReader(fr);
         
@@ -169,7 +173,7 @@ public class SecIndizado {
         
         //verifica si el usuario a ingresar existe en los archivos "usuario"
         String[] usuarioVerificar = datoInsertar.split("\\|");
-        boolean flag = Secuencial.BuscarBool(usuarioVerificar[2], "usuario");
+        boolean flag = Secuencial.BuscarBool(usuarioVerificar[4], "usuario");
         
         
         if (flag) {
@@ -183,7 +187,7 @@ public class SecIndizado {
             bw.close();
             
             //se abre buffer para modificar desc_indice
-            file = new File(pathIndice);
+            file = new File(pathdescIndice);
             fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
                    
@@ -229,7 +233,7 @@ public class SecIndizado {
         BufferedReader br = new BufferedReader(fr);
         
         List<String> datosIndice = br.lines().collect(Collectors.toList());
-        String reg_init = datosIndice.get(1).trim().split(":")[1];
+        String reg_init = datosIndice.get(1).trim().split(": ")[1];
         
         //asigna su respectiva posicion e inserta al final de la lista
         //5 es sig
@@ -489,6 +493,28 @@ public class SecIndizado {
         
         
         return datosEnviar;
+    }
+    
+    public static int getLastRegister() {
+        try {
+             String path = "C:\\MEIA\\indice_lista_usuario.txt"; 
+            FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr);
+             int count = 0; 
+            List<String> datos = br.lines().collect(Collectors.toList());           
+            
+            for (int i = 0; i < datos.size(); i++) {
+                
+                String[] datosSplit = datos.get(i).trim().split("\\|");
+                count = Integer.valueOf(datosSplit[0]);
+            }
+             return count;
+        }
+        
+        catch(Exception e) {
+            
+        }
+        return 0;
     }
     
 }
