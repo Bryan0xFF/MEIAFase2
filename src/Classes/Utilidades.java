@@ -89,6 +89,66 @@ public class Utilidades {
               
     }
     
+    public static boolean VolcarMasterListas(String Master) 
+            throws IOException{
+        
+        File tmpDir = new File("C:\\MEIA\\tempVolcado.txt");
+        
+        //se abre un buffer hacia la bitacora
+        String pathBitacora = "C:\\MEIA\\bitacora_" + Master + ".txt";
+        FileReader fr = new FileReader(pathBitacora);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datosBitacora = br.lines().collect(Collectors.toList());
+        
+        //se leen los datos de master
+        String pathMaster = "C:\\MEIA\\" + Master + ".txt";
+        fr = new FileReader(pathMaster);
+        br = new BufferedReader(fr);
+        
+        List<String> datosMaster = br.lines().collect(Collectors.toList());
+        
+        br.close();
+        
+        if (datosMaster != null) {
+            
+            //ordena los datos
+            datosMaster.addAll(datosBitacora);
+            
+            Collections.sort(datosMaster);
+            
+            FileWriter fw = new FileWriter(tmpDir);
+            BufferedWriter bw = new BufferedWriter(fw);
+                              
+            for (int i = 0; i < datosMaster.size(); i++) {
+                //validar si status es 1, de lo contrario no agregar
+                
+                String[] datos = datosMaster.get(i).replace("&", "")
+                        .split("\\|");
+                
+                if (!datos[5].equals("0")) {
+                    bw.append(datosMaster.get(i) + "\r\n");
+                }
+                
+                
+            }
+            
+            bw.close();
+            
+            File master = new File(pathMaster);          
+            File bitacora = new File(pathBitacora);
+            FileWriter Escribir = new FileWriter(bitacora,false);
+            Escribir.close();
+            master.delete();
+            renameFile(tmpDir, Master);
+            
+        }
+        
+        
+       return true;
+              
+    }
+    
     public static void renameFile(File toBeRenamed, String new_name)
     throws IOException {
     //need to be in the same path

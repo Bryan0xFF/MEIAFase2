@@ -441,7 +441,12 @@ public class Secuencial {
                         
             }else{
                 //se mete todo al archivo Maestro
-                Utilidades.VolcarMaster(nombreMaster);
+                if(nombreMaster.equals("usuario")) {
+                    Utilidades.VolcarMaster(nombreMaster);
+                }
+                else {
+                    Utilidades.VolcarMasterListas(nombreMaster); 
+                }
                 
                 //se debe resetear el archivo descriptor y volver a llamar
                 //al metodo escribir para que ingrese los datos a la bitacora
