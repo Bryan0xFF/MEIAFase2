@@ -5,17 +5,41 @@
  */
 package Forms;
 
+import Classes.Lista;
+import Classes.Usuario;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
+
 /**
  *
  * @author rodri
  */
 public class AddToListForm extends javax.swing.JFrame {
 
-    //Lista lista = new Lista(); 
+    Lista lista = new Lista(); 
+    DefaultListModel allLists = new DefaultListModel();
+    public Usuario user = new Usuario(); 
     
     public AddToListForm() {
         initComponents();
         this.setLocationRelativeTo(null);
+        UserForm userForm = new UserForm(); 
+        user = userForm.usuario; 
+        
+        try {         
+            allLists = lista.BuscarLista(user.getUsuario());
+             
+            
+            List.setModel(allLists);
+        }
+        catch (IOException ex) {
+            Logger.getLogger(AddToListForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -28,7 +52,7 @@ public class AddToListForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        List = new javax.swing.JList<>();
         tfUsuario = new javax.swing.JTextField();
         lblListas = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -38,13 +62,13 @@ public class AddToListForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        List.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jScrollPane1.setViewportView(jList1);
+        List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jScrollPane1.setViewportView(List);
 
         lblListas.setText("Listas creadas:");
 
@@ -172,10 +196,10 @@ public class AddToListForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> List;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevaLista;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblListas;
     private javax.swing.JLabel lblUsuario;

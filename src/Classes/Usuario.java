@@ -218,7 +218,7 @@ public class Usuario{
     return line.toString();
     }
     
-    public String fromFixedSizeString (String word) {
+    public static String fromFixedSizeString (String word) {
         StringBuilder newWord = new StringBuilder(); 
         int cont = 0; 
         char amber = '&';

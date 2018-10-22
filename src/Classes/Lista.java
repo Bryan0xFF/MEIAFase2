@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -31,6 +32,9 @@ public class Lista {
     //llave primaria compuesta por Nombre_lista y usuario
     
     
+    public Lista() {
+        
+    }
     
     public Lista(String nombre_lista, Usuario usuario, String descripcion) throws Exception{
         
@@ -77,13 +81,13 @@ public class Lista {
         sb.append(ToFixedSizeString(this.fecha_creacion,38));
         sb.append("|");
         sb.append(ToFixedSizeString(this.status,1));
-        
+        sb.append("\r\n");
         return sb.toString();
     }
     
     public int getSize(){
         
-        return 138;
+        return 140;
     }
     /**
      * dato normalizado
@@ -116,38 +120,40 @@ public class Lista {
         
     }
     
-     public static List<String> BuscarLista(String idUsuario) throws IOException{
+    public static DefaultListModel<String> BuscarLista(String idUsuario) throws IOException{
         
         //se busca primero en la bitacora
         String path = "C:\\MEIA\\bitacora_lista.txt";
         FileReader fr = new FileReader(path);
         BufferedReader br = new BufferedReader(fr);
-        List<String> datosEnviar = new ArrayList<>();
+        DefaultListModel datosEnviar = new DefaultListModel();
         
         List<String> datos = br.lines().collect(Collectors.toList());
         br.close();
         
          for (int i = 0; i < datos.size(); i++) {
-             String[] split = datos.get(i).trim().split("\\|");
+             String trim = Classes.Usuario.fromFixedSizeString(datos.get(i)); 
+             String[] split = trim.split("\\|");
              
              if (split[1].equals(idUsuario)) {
-                 datosEnviar.add(split[1]);
+                 datosEnviar.addElement(split[0]);
              }
          }
          
          //se busca luego en Master
           path = "C:\\MEIA\\lista.txt";
           fr = new FileReader(path);
-          br = new BufferedReader(br);
+          br = new BufferedReader(fr);
           
           datos = br.lines().collect(Collectors.toList());
           br.close();
           
           for (int i = 0; i < datos.size(); i++) {
-              String[] split = datos.get(i).trim().split("\\|");
+             String trim = Classes.Usuario.fromFixedSizeString(datos.get(i)); 
+             String[] split = trim.split("\\|");
              
              if (split[1].equals(idUsuario)) {
-                 datosEnviar.add(split[1]);
+                 datosEnviar.addElement(split[0]);
              }
          }
         return datosEnviar;
