@@ -458,6 +458,7 @@ public class Secuencial {
         return true;
     }
     
+    
     public static boolean BuscarBool(String idUsuario, String Master) throws IOException{
           
         boolean flag = false;

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,6 +112,43 @@ public class Lista {
             e.printStackTrace();
         }
         
+    }
+    
+     public static List<String> BuscarLista(String idUsuario) throws IOException{
+        
+        //se busca primero en la bitacora
+        String path = "C:\\MEIA\\bitacora_lista.txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        List<String> datosEnviar = new ArrayList<>();
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+         for (int i = 0; i < datos.size(); i++) {
+             String[] split = datos.get(i).trim().split("\\|");
+             
+             if (split[1].equals(idUsuario)) {
+                 datosEnviar.add(split[1]);
+             }
+         }
+         
+         //se busca luego en Master
+          path = "C:\\MEIA\\lista.txt";
+          fr = new FileReader(path);
+          br = new BufferedReader(br);
+          
+          datos = br.lines().collect(Collectors.toList());
+          br.close();
+          
+          for (int i = 0; i < datos.size(); i++) {
+              String[] split = datos.get(i).trim().split("\\|");
+             
+             if (split[1].equals(idUsuario)) {
+                 datosEnviar.add(split[1]);
+             }
+         }
+        return datosEnviar;
     }
     
 }
