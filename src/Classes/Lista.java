@@ -159,4 +159,74 @@ public class Lista {
         return datosEnviar;
     }
     
+        public static boolean SobreescribirLista
+        (String fixedSize, String id, String master, int tamanio,String usuario) throws IOException{
+        
+         RandomAccessFile RAF = null;
+         
+         //se empieza por buscar en la bitacora
+         FileReader fr = new FileReader("C:\\MEIA\\bitacora_" + master + ".txt");
+         BufferedReader br = new BufferedReader(fr);
+         
+         int count = 0; //sirve para offset
+         
+         int FixedSize = tamanio + 2;
+         
+         List<String> datosTemp = br.lines().collect(Collectors.toList());
+         
+         for (int i = 0; i < datosTemp.size(); i++) {
+            
+             String[] linea = datosTemp.get(i).replace("&", "").split("\\|");
+             
+             if (linea[0].equals(id)) {
+                 if (linea[1].equals(usuario)) {
+                     
+                 //se cierra para abrir RAF
+                 br.close();
+                 RAF = new RandomAccessFile("C:\\MEIA\\bitacora_" + master + ".txt","rw");
+                 RAF.seek((FixedSize * count));
+                 long pointer = RAF.getFilePointer();
+                 RAF.write(fixedSize.getBytes());
+                 RAF.close();
+                
+                 return true;
+                 }
+                
+             }else{
+                 count = count + 1;
+             }
+        }
+         
+        count = 0;
+        
+        //se abre un stream hacia Master
+        fr = new FileReader("C:\\MEIA\\" + master + ".txt");
+        br = new BufferedReader(fr);
+        
+        List<String> datosMaster = br.lines().collect(Collectors.toList());
+        
+        for (int i = 0; i < datosMaster.size(); i++) {
+            
+             String[] linea = datosMaster.get(i).replace("&", "").split("\\|");
+             
+             if (linea[0].equals(id)) {
+                 if (linea[1].equals(usuario)) {
+                 //se cierra para abrir RAF
+                 br.close();
+                 RAF = new RandomAccessFile("C:\\MEIA\\" + master + ".txt","rw");
+                 RAF.seek((FixedSize * count));
+                 long pointer = RAF.getFilePointer();
+                 RAF.write(fixedSize.getBytes());
+                 RAF.close();
+                
+                 return true;
+                 }  
+             }else{
+                 count = count + 1;
+             }
+        }
+        
+         return false;
+    }
+    
 }
