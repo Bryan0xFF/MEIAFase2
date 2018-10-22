@@ -11,9 +11,8 @@ package Forms;
  */
 public class AddToListForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form AddToListForm
-     */
+    //Lista lista = new Lista(); 
+    
     public AddToListForm() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -125,11 +124,11 @@ public class AddToListForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnNuevaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaListaActionPerformed
