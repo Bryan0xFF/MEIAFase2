@@ -54,7 +54,7 @@ public class Lista {
       this.fecha_creacion = today;
       
       
-      Escribir("lista", setFixedSize(),usuario.getUsuario());
+        Escribir("lista", setFixedSize(),usuario.getUsuario());
     }
     
     private String ToFixedSizeString(String word, int count) {

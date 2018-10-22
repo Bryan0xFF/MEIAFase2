@@ -5,11 +5,15 @@
  */
 package Classes;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,7 +28,7 @@ public class Lista_Usuario {
     String fecha_creacion;
     String status;
     
-    public Lista_Usuario(String nombre, String usuario, String Usuario_asociado, String descripcion){
+    public Lista_Usuario(String nombre, String usuario, String Usuario_asociado, String descripcion) throws Exception{
         nombre_lista = nombre;
         this.usuario = usuario;
         this.usuario_asociado = Usuario_asociado;
@@ -38,6 +42,8 @@ public class Lista_Usuario {
       
       this.fecha_creacion = today;
       status = "1";      
+      
+      Escribir("lista_usuario", setFixedSizeString(),usuario);
     }
     
     private String ToFixedSizeString(String word, int count) {
@@ -64,6 +70,7 @@ public class Lista_Usuario {
         sb.append(ToFixedSizeString(this.fecha_creacion,38));
         sb.append("|");
         sb.append(ToFixedSizeString(this.status,1));
+        sb.append("\r\n");
         
         return sb.toString();
     }
@@ -108,5 +115,32 @@ public class Lista_Usuario {
         
         
         return sb.toString();  
+    }
+    
+     public void Escribir(String nombreMaster, String datoIngresar, String nombreAdmin) throws IOException, Exception{
+        //busca si existe un usuario con este nombre
+        try{
+            boolean flag = true;
+            String path = "C:\\MEIA\\bitacora_" + nombreMaster + ".txt"; 
+            FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr);
+            
+            List<String> datos = br.lines().collect(Collectors.toList());
+            String[] ingreso = datoIngresar.trim().split("\\|");
+            
+            for (int i = 0; i < datos.size(); i++) {
+                
+                String[] datosSplit = datos.get(i).trim().split("\\|");
+                if (datosSplit[0].equals(ingreso[0]) && datosSplit[1].equals(ingreso[1])) {
+                    throw new Exception("ya existe el usuario en esa lista");
+                }
+            }
+            
+            Secuencial.Escribir(datoIngresar,"lista_usuario",nombreAdmin);
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }
 }

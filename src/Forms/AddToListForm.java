@@ -6,6 +6,7 @@
 package Forms;
 
 import Classes.Lista;
+import Classes.Lista_Usuario;
 import Classes.Secuencial;
 import Classes.Usuario;
 import static java.awt.image.ImageObserver.WIDTH;
@@ -158,24 +159,25 @@ public class AddToListForm extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
             String nombreLista = List.getSelectedValue();
-            String nombreAsociado = tfUsuario.getText();
-            Lista lista = new Lista();
+            String nombreAsociado = tfUsuario.getText();            
             Usuario asociado = new Usuario();
             asociado = secuencial.ObtenerUsuario(nombreAsociado, "Usuario");
             
-            if (asociado.getUsuario().equals(user)) {
+            if (asociado.getUsuario().equals(nombreAsociado)) {
               lista = lista.ObtenerLista(user.getUsuario(), nombreLista);
               lista.numero_usuarios = lista.numero_usuarios + 1;
               String newFixedSize = lista.setFixedSize();
               Classes.Lista.SobreescribirLista(newFixedSize, nombreLista, "lista", lista.getSize(),user.getUsuario());
-              //Agregar a lista usuario
+              
+              Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
+              
               JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " se ha agregado a la lista: " + nombreLista, "Agregar",WIDTH);  
             }
             else if (!asociado.equals(user)){
               JOptionPane.showMessageDialog(null, "El usuario que desea agregar no existe", "Error",WIDTH);
             }  
         }
-        catch (IOException ex) {
+        catch (Exception ex) {
             Logger.getLogger(AddToListForm.class.getName()).log(Level.SEVERE, null, ex);
         }
        

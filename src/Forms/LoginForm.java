@@ -144,6 +144,7 @@ public class LoginForm extends javax.swing.JFrame {
         try {            
         newUser = secuencial.ObtenerUsuario(user, "Usuario");
           secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
+          secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
           
             if(password.equals(newUser.getPassword()) && user.equals(newUser.getUsuario())) {                
              switch (newUser.getRol()) {
