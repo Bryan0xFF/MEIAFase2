@@ -29,7 +29,9 @@ public class Lista {
     
     //llave primaria compuesta por Nombre_lista y usuario
     
-    public Lista(String nombre_lista, Usuario usuario, String descripcion, String nombreAdmin) throws Exception{
+    
+    
+    public Lista(String nombre_lista, Usuario usuario, String descripcion) throws Exception{
         
         this.nombre_lista = nombre_lista;
         this.usuario = usuario.getUsuario();
@@ -47,7 +49,7 @@ public class Lista {
       this.fecha_creacion = today;
       
       
-      Escribir("lista", setFixedSize(),nombreAdmin);
+      Escribir("lista", setFixedSize(),usuario.getUsuario());
     }
     
     private String ToFixedSizeString(String word, int count) {
@@ -86,7 +88,7 @@ public class Lista {
      * dato normalizado
      * @param nombreMaster 
      */
-    private void Escribir(String nombreMaster, String datoIngresar, String nombreAdmin) throws IOException, Exception{
+    public void Escribir(String nombreMaster, String datoIngresar, String nombreAdmin) throws IOException, Exception{
         //busca si existe un usuario con este nombre
         try{
             boolean flag = true;

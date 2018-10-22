@@ -5,18 +5,24 @@
  */
 package Forms;
 
+import Classes.Lista;
+import Classes.Usuario;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author rodri
  */
 public class CreateListsForm extends javax.swing.JFrame {
-
-    /**
-     * Creates new form CreateListsForm
-     */
+    
+     public static Usuario usuario = new Usuario();
+    
     public CreateListsForm() {
         initComponents();
         this.setLocationRelativeTo(null);
+        UserForm user = new UserForm(); 
+        usuario = user.usuario;
     }
 
     /**
@@ -116,7 +122,15 @@ public class CreateListsForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+       String nombreLista = tfNombreLista.getText(); 
+       String descripcion = taDescripcionLista.getText(); 
+       
+         try { 
+             Lista newList = new Lista(nombreLista, usuario, descripcion);            
+         } 
+         catch (Exception ex) {
+             Logger.getLogger(CreateListsForm.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**

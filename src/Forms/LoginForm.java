@@ -20,8 +20,9 @@ public class LoginForm extends javax.swing.JFrame {
     
     
     
-    Classes.Secuencial ArchivoSecuencial;
+    Secuencial secuencial; 
     public static Usuario newUser = new Usuario(); 
+    
      
     public LoginForm() {
         initComponents();
@@ -139,10 +140,11 @@ public class LoginForm extends javax.swing.JFrame {
         Secuencial secuencial = new Secuencial();       
         String user = tfUsuario.getText(); 
         String password = newUser.Encriptar(tfPassword.getText());
-        
+         
         try {            
         newUser = secuencial.ObtenerUsuario(user, "Usuario");
-               
+          secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
+          
             if(password.equals(newUser.getPassword()) && user.equals(newUser.getUsuario())) {                
              switch (newUser.getRol()) {
                 case 0:
