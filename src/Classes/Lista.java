@@ -87,7 +87,7 @@ public class Lista {
     
     public int getSize(){
         
-        return 140;
+        return 138;
     }
     /**
      * dato normalizado

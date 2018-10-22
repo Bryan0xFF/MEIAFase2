@@ -5,18 +5,39 @@
  */
 package Forms;
 
+import Classes.Lista;
+import Classes.Usuario;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author rodri
  */
 public class ViewListsForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ViewListsForm
-     */
+    Lista lista = new Lista(); 
+    DefaultListModel allLists = new DefaultListModel();
+    public Usuario user = new Usuario(); 
+   
     public ViewListsForm() {
         initComponents();
         this.setLocationRelativeTo(null);
+        UserForm userForm = new UserForm(); 
+        user = userForm.usuario; 
+        
+        try {         
+            allLists = lista.BuscarLista(user.getUsuario());
+             
+            
+            List.setModel(allLists);
+        }
+        catch (IOException ex) {
+            Logger.getLogger(AddToListForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   
     }
 
     /**
@@ -29,18 +50,18 @@ public class ViewListsForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        List = new javax.swing.JList<>();
         btnEliminar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        List.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(List);
 
         btnEliminar.setText("Elliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -131,9 +152,9 @@ public class ViewListsForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> List;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
