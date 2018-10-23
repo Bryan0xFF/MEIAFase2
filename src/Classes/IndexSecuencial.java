@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -33,7 +34,7 @@ public class IndexSecuencial {
         {
             
             List<String> miLista = new ArrayList<>();
-            File Archivo = new File("C:/MEIA/lista1.txt");
+            File Archivo = new File("C:\\MEIA\\lista1.txt");
             BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
             String last = br2.readLine(); 
             while (last != null) 
@@ -49,7 +50,7 @@ public class IndexSecuencial {
             miLista.add(lineaAgregar2);
             for ( String lineas : miLista ) 
             {
-                LlenarArchivo("C:/MEIA/lista1.txt",lineas,"ERROR");
+                LlenarArchivo("C:\\MEIA\\lista1.txt",lineas,"ERROR");
             }
             
         }
@@ -65,7 +66,7 @@ public class IndexSecuencial {
         {
             int numero = 0;
             List<String> miLista = new ArrayList<>();
-            File Archivo = new File("C:/MEIA/lista1.txt");
+            File Archivo = new File("C:\\MEIA\\lista1.txt");
             BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
             String last = br2.readLine(); 
             while (last != null) 
@@ -94,7 +95,7 @@ public class IndexSecuencial {
                 int numero2 = 0;
                 if (numero2<=numero)
                 {
-                    LlenarArchivo("C:/MEIA/lista1.txt",lineas,"ERROR");
+                    LlenarArchivo("C:\\MEIA\\lista1.txt",lineas,"ERROR");
                     numero2++;
                 }
                 
@@ -118,18 +119,18 @@ public class IndexSecuencial {
                     
                     usuarioAsociado[5] = usuario[0];
                     
-                   // IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
-                    //IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]); 
+                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
+                    IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]); 
                  
                     BorrarLineas(usuario[0],usuarioAsociado[0],miLista.ToString(),miLista2.ToString());
                 }
                 else
                 {
-                    String[] anterior = buscar("C:/MEIA/lista1.txt",usuario[0]);
+                    String[] anterior = buscar("C:\\MEIA\\lista1.txt",usuario[0]);
                     anterior[5] = usuarioAsociado[0];
                     usuarioAsociado[5] = usuario[0];
-                    //IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(anterior[0]),anterior[1],anterior[2],anterior[3],anterior[4],Integer.valueOf(anterior[5]),anterior[6]);
-                    //IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
+                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(anterior[0]),anterior[1],anterior[2],anterior[3],anterior[4],Integer.valueOf(anterior[5]),anterior[6]);
+                    IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
                     BorrarLineas2(anterior[0],miLista.ToString(),miLista2.ToString());
                     
                     
@@ -158,7 +159,7 @@ public class IndexSecuencial {
     
     public void agregar(String[] usuarioAgregar) throws IOException
     {
-        escribir(buscar2("C:/MEIA/lista1.txt","1"),usuarioAgregar,1,2);
+        escribir(buscar2("C:\\MEIA\\lista1.txt","1"),usuarioAgregar,1,2);
     }
      
     public void LlenarArchivo(String strPath,String strContenido,String strError)
@@ -202,10 +203,10 @@ public class IndexSecuencial {
     
     public String[] apuntadorSiguiente(int apuntador) throws IOException
     {
-        try (Stream<String> lines = Files.lines(Paths.get("C:/MEIA/lista1.txt"))) 
+        try (Stream<String> lines = Files.lines(Paths.get("C:\\MEIA\\lista.txt"))) 
         {
             String line = lines.skip(apuntador-1).findFirst().get();
-            String[] especificLine = line.split("//");
+            String[] especificLine = line.split("\\|");
             return especificLine;
         }
         catch(Exception ex)
@@ -217,7 +218,7 @@ public class IndexSecuencial {
     public String quitarCaracteres(String textoEntero)
     {
         StringBuilder texto = new StringBuilder();
-        char separador = '%';
+        char separador = '&';
         for(int i = 0;i<textoEntero.length(); i++)
         {
             char separador2 = textoEntero.charAt(i);
@@ -237,7 +238,7 @@ public class IndexSecuencial {
         String last = br2.readLine(); 
         while (last != null) 
         { 
-            String[] objeto= last.split("//");
+            String[] objeto= last.split("\\|");
             String nuevo = quitarCaracteres(objeto[5]);
             if (nuevo.equals(siguiente)) {
                 objeto2 = objeto;
@@ -257,7 +258,7 @@ public class IndexSecuencial {
         String last = br2.readLine(); 
         while (last != null) 
         { 
-            String[] objeto= last.split("//");
+            String[] objeto= last.split("\\|");
             String nuevo = quitarCaracteres(objeto[0]);
             if (nuevo.equals(encontrar)) {
                 objeto2 = objeto;
@@ -290,9 +291,21 @@ public class IndexSecuencial {
     
      public void vaciarArchivo() throws FileNotFoundException, IOException
     {
-        BufferedWriter bw = new BufferedWriter(new FileWriter("C:/MEIA/lista1.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\MEIA\\lista1.txt"));
         bw.write("");
         bw.close();
+    }
+     
+    private String ObtenerInicio(){
+        
+         String pathdescIndice = "C:\\MEIA\\desc_indice_lista.txt";
+        FileReader fr = new FileReader(pathdescIndice);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datosDescIndice = br.lines().collect(Collectors.toList());
+        String[] RegInicio = datosDescIndice.get(1).trim().split(": ");
+        br.close();
+        
     }
     
 }    
