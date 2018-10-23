@@ -6,7 +6,9 @@
 package Classes;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -142,13 +144,13 @@ public class Lista_Usuario {
         //busca si existe un usuario con este nombre
         try{
             boolean flag = true;
-            String path = "C:\\MEIA\\bitacora_" + nombreMaster + ".txt"; 
+            String path = "C:\\MEIA\\" + nombreMaster + ".txt"; 
             FileReader fr = new FileReader(path);
             BufferedReader br = new BufferedReader(fr);
             
             List<String> datos = br.lines().collect(Collectors.toList());
             String[] ingreso = datoIngresar.trim().split("\\|");
-            
+            br.close();
             for (int i = 0; i < datos.size(); i++) {
                 
                 String[] datosSplit = datos.get(i).trim().split("\\|");
@@ -157,7 +159,13 @@ public class Lista_Usuario {
                 }
             }
             
-            Secuencial.Escribir(datoIngresar,"lista_usuario",nombreAdmin);
+            FileWriter fw = new FileWriter(path);
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            bw.append(datoIngresar);
+            bw.append("\r\n");
+            bw.flush();
+            bw.close();
             
         }catch(Exception e){
             e.printStackTrace();

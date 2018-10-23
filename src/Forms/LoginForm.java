@@ -143,9 +143,9 @@ public class LoginForm extends javax.swing.JFrame {
         String password = newUser.Encriptar(tfPassword.getText());
          
         try {            
-        newUser = secuencial.ObtenerUsuario(user, "Usuario");
+        newUser = secuencial.ObtenerUsuario(user, "usuario");
         secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
-        //secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
+        secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
         secuencialIndex = new SecIndizado("lista_usuario", tfUsuario.getText());
           
             if(password.equals(newUser.getPassword()) && user.equals(newUser.getUsuario())) {                

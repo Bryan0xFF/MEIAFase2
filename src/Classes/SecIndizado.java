@@ -164,7 +164,7 @@ public class SecIndizado {
         String[] RegInicio = datosDescIndice.get(1).trim().split(": ");
         br.close();
         
-        String pathIndice = "C:\\MEIA\\" + nombreMaster + ".txt";
+        String pathIndice = "C:\\MEIA\\indice_" + nombreMaster + ".txt";
         fr = new FileReader(pathIndice);
         br = new BufferedReader(fr);
         
@@ -246,17 +246,21 @@ public class SecIndizado {
         String[] datoLista = datos.get((Integer.parseInt(reg_init) - 1)).split("\\|");
         String[] datoAnterior = null;
         
+        for (String datoLista1 : datoLista) {
+            datoLista1.replace("&", "");
+        }
+        
         boolean flag = false;
         
         //cambiar condicion del while
         while(flag == false){
             
             //si nom_lista del dato a insertar es igual al dato comparado
-            if (datoAInsertar[2].compareTo(datoLista[2]) == 0) {
+            if (datoAInsertar[2].trim().compareTo(datoLista[2].trim()) == 0) {
                 
-                if (datoAInsertar[3].compareTo(datoLista[3]) == 0) {
+                if (datoAInsertar[3].trim().compareTo(datoLista[3].trim()) == 0) {
                     
-                    if (datoAInsertar[4].compareTo(datoLista[4]) == 0) {
+                    if (datoAInsertar[4].trim().compareTo(datoLista[4].trim()) == 0) {
                     
                         throw new Exception("datos iguales");
                         
@@ -284,7 +288,11 @@ public class SecIndizado {
                             //se toma el dato
                             datoAnterior = datoLista;
                             datoLista = datos.get((sig - 1)).split("\\|");
+                             for (String datoLista1 : datoLista) {
+                                datoLista1.replace("&", "");
+                             }
                             flag = false;
+                            count++;
                         }
                         
                      //el dato a insertar el menor   
@@ -320,7 +328,11 @@ public class SecIndizado {
                             //se toma el dato
                             datoAnterior = datoLista;
                             datoLista = datos.get((sig - 1)).split("\\|");
+                            for (String datoLista1 : datoLista) {
+                                datoLista1.replace("&", "");
+                             }
                             flag = false;
+                            count++;
                         }
                  
                 //el dato a insertar es menor    
@@ -357,7 +369,11 @@ public class SecIndizado {
                             //se toma el dato
                             datoAnterior = datoLista;
                             datoLista = datos.get((sig - 1)).split("\\|");
+                            for (String datoLista1 : datoLista) {
+                                datoLista1.replace("&", "");
+                             }
                             flag = false;
+                            count++;
                         }
                 
             //el dato es menor. insertar    
@@ -378,7 +394,6 @@ public class SecIndizado {
             }
             
         }
-        
         return datos;
     }
     
@@ -517,4 +532,49 @@ public class SecIndizado {
         return 0;
     }
     
+    public static void AumentarDesc(String nombreMaster) throws IOException{
+        
+        String path = "C:\\MEIA\\desc_"+nombreMaster+".txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        List<String> info = new ArrayList<>();
+        br.close();
+        /*
+        1. num_reg
+        2. reg_act
+        3. reg_inact
+        */
+        for (int i = 0; i < 5; i++) {
+            
+            String[] add = datos.get(i).trim().split(": ");
+            info.add(add[1]);
+        }
+        
+        File file = new File(path);
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        int num_reg = Integer.valueOf(info.get(2));
+        num_reg++;
+        
+        int reg_act = Integer.valueOf(info.get(3));
+        reg_act++;
+        
+        int reg_inact = num_reg - reg_act;
+        
+        bw.append("Usuario_Creacion: " + info.get(0));
+        bw.append("\r\n");
+        bw.append("Fecha_Creacion: " + info.get(1));
+        bw.append("\r\n");
+        bw.write("Num_reg: " + Integer.toString(num_reg));
+        bw.write("\r\n");
+        bw.write("reg_activos: "+ Integer.toString(reg_act));
+        bw.write("\r\n");
+        bw.write("Reg_inact: "+ Integer.toString(reg_inact));
+        
+        bw.flush();
+        bw.close();
+    }
 }

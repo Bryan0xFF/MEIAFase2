@@ -179,8 +179,9 @@ public class AddToListForm extends javax.swing.JFrame {
               
               Classes.Lista.SobreescribirLista(overWrite, nombreLista, "lista", lista.getSize(),user.getUsuario());              
               secuencialIndex.datosOrdenados(newFixedSize, "lista_usuario");
+              secuencialIndex.AumentarDesc("lista_usuario");
               
-             // Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
+             Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
               
               JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " se ha agregado a la lista: " + nombreLista, "Agregar",WIDTH);  
             }
