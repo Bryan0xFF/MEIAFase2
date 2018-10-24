@@ -87,6 +87,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="tfUsuario">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Alexrod97"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblUsuario">
       <Properties>
@@ -128,6 +131,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="tfPassword">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Paalrosu21"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

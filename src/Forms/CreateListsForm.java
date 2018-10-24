@@ -7,8 +7,10 @@ package Forms;
 
 import Classes.Lista;
 import Classes.Usuario;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -126,7 +128,8 @@ public class CreateListsForm extends javax.swing.JFrame {
        String descripcion = taDescripcionLista.getText(); 
        
          try { 
-             Lista newList = new Lista(nombreLista, usuario, descripcion);            
+             Lista newList = new Lista(nombreLista, usuario, descripcion); 
+             JOptionPane.showMessageDialog(null, "La lista " + nombreLista + " se ha agregafo con éxito", "Agregar",WIDTH);
          } 
          catch (Exception ex) {
              Logger.getLogger(CreateListsForm.class.getName()).log(Level.SEVERE, null, ex);

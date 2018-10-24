@@ -5,6 +5,8 @@
  */
 package Forms;
 
+import Classes.IndexSecuencial;
+import Classes.IndiceListaUsuario;
 import Classes.Lista;
 import Classes.Lista_Usuario;
 import Classes.SecIndizado;
@@ -164,25 +166,23 @@ public class AddToListForm extends javax.swing.JFrame {
             nombreAsociado = tfUsuario.getText();            
             Usuario asociado = new Usuario();
             asociado = secuencial.ObtenerUsuario(nombreAsociado, "Usuario");
-            int count = 0; 
+            int count = 0;    
+            
+            IndiceListaUsuario indiceListaUsuario = new IndiceListaUsuario();            
             SecIndizado secuencialIndex = new SecIndizado();
+            IndexSecuencial index = new IndexSecuencial();    
             
             if (asociado.getUsuario().equals(nombreAsociado)) {
               lista = lista.ObtenerLista(user.getUsuario(), nombreLista);
               count = Integer.valueOf(lista.numero_usuarios);
-              count++; 
+              count++;
               lista.numero_usuarios = String.valueOf(count);
-              int cant = secuencialIndex.getLastRegister(); 
+              String overWritedList = lista.setFixedSize();
+              Classes.Lista.SobreescribirLista(overWritedList, nombreLista, "lista", lista.getSize(),user.getUsuario());
               
-              String newFixedSize = Classes.Lista_Usuario.setData(cant, nombreLista, user.getUsuario(), nombreAsociado);
-              String overWrite = lista.setFixedSize();
+              Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
               
-              Classes.Lista.SobreescribirLista(overWrite, nombreLista, "lista", lista.getSize(),user.getUsuario());              
-              secuencialIndex.datosOrdenados(newFixedSize, "lista_usuario");
-              secuencialIndex.AumentarDesc("lista_usuario");
-              
-             Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
-              
+              //Implementar aqui el metodo para el archivo indexado
               JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " se ha agregado a la lista: " + nombreLista, "Agregar",WIDTH);  
             }
             else if (!asociado.equals(user)){
