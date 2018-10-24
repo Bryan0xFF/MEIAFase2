@@ -5,9 +5,14 @@
  */
 package Classes;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -85,4 +90,18 @@ public class IndiceListaUsuario {
         {
             return ConvertirATextoTamañoFijo();
         }
+        
+    public String[] obtenerUsuarioSplit() throws IOException{
+        
+        String inicio = IndexSecuencial.ObtenerInicio();
+        FileReader fr = new FileReader("C:\\MEIA\\indice_lista_usuario.txt");
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        
+        String usuario = datos.get(Integer.parseInt(inicio) - 1);
+        String[] usuarioEnviar = usuario.split("\\|");
+        
+        return usuarioEnviar;
+    }
 }

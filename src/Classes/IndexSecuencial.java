@@ -31,8 +31,8 @@ import java.util.stream.Stream;
  */
 public class IndexSecuencial {
     
-    public IndexSecuencial() {
-        
+    public IndexSecuencial() throws IOException{
+        CrearDescIndice("lista_usuario");
     }
     
     public void BorrarLineas(String linea1,String linea2,String lineaAgregar1,String lineaAgregar2)
@@ -65,6 +65,26 @@ public class IndexSecuencial {
         {
             
         }
+    }
+    
+    private boolean CrearDescIndice(String nombreMaster) throws IOException{
+        
+        File file = new File("C:\\MEIA\\desc_Indice_" + nombreMaster +".txt");
+        boolean flag = file.createNewFile();
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("Num_reg: " + "0");
+        bw.write("\r\n");
+        bw.write("Reg_inicio: " + "0");
+        bw.write("\r\n");
+        bw.write("reg_activos: "+"0");
+        bw.write("\r\n");
+        bw.write("Reg_inact: " + "0");
+        
+        bw.flush();
+        bw.close();
+        return flag;
     }
     
     public void BorrarLineas2(String linea1,String lineaAgregar1,String lineaAgregar2)
@@ -114,6 +134,8 @@ public class IndexSecuencial {
             
         }
     }
+    //usuario lo obtengo obteniendo el reg_inicio, usuario asociado obtener mediante form
+    //posicion [2]
     public boolean escribir(String[] usuario, String[] usuarioAsociado,int primero,int posicion) throws IOException
     {
         switch (comparar(usuarioAsociado[posicion],usuario[posicion])) {
@@ -304,20 +326,17 @@ public class IndexSecuencial {
         bw.close();
     }
      
-    private String ObtenerInicio(){        
-        try {
-        String pathdescIndice = "C:\\MEIA\\desc_indice_lista.txt";
+    public static String ObtenerInicio() throws IOException {        
+        //se abre un buffer hacia el desc_indice para saber donde comenzar a leer
+        String pathdescIndice = "C:\\MEIA\\desc_indice_lista_usuario.txt";
         FileReader fr = new FileReader(pathdescIndice);
         BufferedReader br = new BufferedReader(fr);
         
         List<String> datosDescIndice = br.lines().collect(Collectors.toList());
         String[] RegInicio = datosDescIndice.get(1).trim().split(": ");
         br.close();
+        
         return RegInicio[1];
-        } catch (Exception ex) {
-            Logger.getLogger(IndexSecuencial.class.getName()).log(Level.SEVERE, null, ex);
-        }  
-        return "";
     }
     
     
@@ -377,9 +396,63 @@ public class IndexSecuencial {
         }
     }
         
+     /**
+      * numReg: nuevo inicio
+      * listaSize: cant. de registros
+      * regAct: registros activos
+      * regInact: registros Inactivos
+      * @param numReg
+      * @param listaSize
+      * @param regAct
+      * @param regInact
+      * @return
+      * @throws IOException 
+      */ 
+    private static boolean ModificarDescIndice(String numReg, int listaSize, int regAct, int regInact) throws IOException{
         
+        String path = "C:\\MEIA\\desc_indice_lista_usuario.txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        String[] datosArray = (String[]) datos.toArray();
+        
+        String[] override = datosArray[1].trim().split(":");
+        override[1] = numReg;
+        
+        File file = new File(path);
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("Num_reg: " + listaSize);
+        bw.write("\r\n");
+        bw.write("Reg_inicio: " + override[1]);
+        bw.write("\r\n");
+        bw.write("reg_activos: "+ regAct);
+        bw.write("\r\n");
+        bw.write("Reg_inact: " + regInact);
+            
+        bw.flush();
+        bw.close();
+        
+        return true;
+        
+    }
     
-    
+    public int UltimoRegistro() throws IOException{
+        
+        String path = "C:\\MEIA\\desc_indice_lista_usuario.txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        return datos.size() + 1;
+        
+    }
     
     public void Reordenar(){
         
