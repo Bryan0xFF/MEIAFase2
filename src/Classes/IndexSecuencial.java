@@ -189,6 +189,9 @@ public class IndexSecuencial {
     
     public void agregar(String[] usuarioAgregar) throws IOException
     {
+        //Este metodo sirve para obtener la linea donde empieza el archivo
+        //En vez del 1 se tiene que mandar a leer primero el descriptor para obtener el registro de inicio\
+        //luego de leerlo, se anda el parametro al metodo
         escribir(buscar2("C:\\MEIA\\indice_lista_usuario.txt","1"),usuarioAgregar,1,2);
     }
      
