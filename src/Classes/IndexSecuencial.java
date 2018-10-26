@@ -5,6 +5,7 @@
  */
 package Classes;
 
+import static java.awt.image.ImageObserver.WIDTH;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -33,6 +35,35 @@ public class IndexSecuencial {
     
     public IndexSecuencial() throws IOException{
         CrearDescIndice("lista_usuario");
+        CrearMaster();
+    }
+    
+    private int countActives(List<String> list) {
+        int cont = 0, number = 0; 
+        
+        for (int i = 0; i < list.size(); i++) {
+            String line = list.get(i); 
+            String[] split = line.split("\\|"); 
+            number = Integer.valueOf(split[6]);
+            if(number == 1) {
+                cont++;
+            }            
+        }
+        return cont; 
+    }
+    
+    private int countDeActives(List<String> list) {
+        int cont = 0, number = 0; 
+        
+        for (int i = 0; i < list.size(); i++) {
+            String line = list.get(i); 
+            String[] split = line.split("\\|"); 
+            number = Integer.valueOf(split[6]);
+            if(number == 0) {
+                cont++;
+            }            
+        }
+        return cont; 
     }
     
     public void BorrarLineas(String linea1,String linea2,String lineaAgregar1,String lineaAgregar2)
@@ -41,7 +72,7 @@ public class IndexSecuencial {
         {
             
             List<String> miLista = new ArrayList<>();
-            File Archivo = new File("C:\\MEIA\\lista1.txt");
+            File Archivo = new File("C:\\MEIA\\indice_lista_usuario.txt");
             BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
             String last = br2.readLine(); 
             while (last != null) 
@@ -51,13 +82,24 @@ public class IndexSecuencial {
             } 
             br2.close();
             vaciarArchivo();
-            miLista.remove(Integer.valueOf(linea1)-1);
-            miLista.remove(Integer.valueOf(linea2)-1);
+            miLista.remove(Integer.valueOf(linea1)-1);           
             miLista.add(lineaAgregar1);
             miLista.add(lineaAgregar2);
+            Collections.sort(miLista, new Comparator<String>() {
+            public int compare(String o1, String o2) {
+                return extractInt(o1) - extractInt(o2);
+            }
+
+        int extractInt(String s) {
+            String num = s.replaceAll("\\D", "");
+            return num.isEmpty() ? 0 : Integer.parseInt(num);
+            }
+         });
+
             for ( String lineas : miLista ) 
             {
-                LlenarArchivo("C:\\MEIA\\lista1.txt",lineas,"ERROR");
+                LlenarArchivo("C:\\MEIA\\indice_lista_usuario.txt",lineas,"ERROR");
+                
             }
             
         }
@@ -71,12 +113,14 @@ public class IndexSecuencial {
         
         File file = new File("C:\\MEIA\\desc_Indice_" + nombreMaster +".txt");
         boolean flag = file.createNewFile();
+        
+       if(flag) {
         FileWriter fw = new FileWriter(file);
         BufferedWriter bw = new BufferedWriter(fw);
         
         bw.write("Num_reg: " + "0");
         bw.write("\r\n");
-        bw.write("Reg_inicio: " + "0");
+        bw.write("Reg_inicio: " + "1");
         bw.write("\r\n");
         bw.write("reg_activos: "+"0");
         bw.write("\r\n");
@@ -84,16 +128,37 @@ public class IndexSecuencial {
         
         bw.flush();
         bw.close();
+        
+       } else {
+           
+            JOptionPane.showMessageDialog(null, "El descriptor ya existe", "Mensaje",WIDTH);
+       }
+        
         return flag;
     }
     
+    private static boolean CrearMaster() throws IOException{
+        
+        File file = null;
+        String data = "";
+       
+        data = "C:\\MEIA\\indice_lista_usuario.txt";
+        
+        file = new File(data);
+        
+        boolean flag = file.createNewFile();
+        
+        return flag;
+    }
+    
+  
     public void BorrarLineas2(String linea1,String lineaAgregar1,String lineaAgregar2)
     {
         try  
         {
             int numero = 0;
             List<String> miLista = new ArrayList<>();
-            File Archivo = new File("C:\\MEIA\\lista1.txt");
+            File Archivo = new File("C:\\MEIA\\indice_lista_usuario.txt");
             BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
             String last = br2.readLine(); 
             while (last != null) 
@@ -122,7 +187,7 @@ public class IndexSecuencial {
                 int numero2 = 0;
                 if (numero2<=numero)
                 {
-                    LlenarArchivo("C:\\MEIA\\lista1.txt",lineas,"ERROR");
+                    LlenarArchivo("C:\\MEIA\\indice_lista_usuario.txt",lineas,"ERROR");
                     numero2++;
                 }
                 
@@ -134,11 +199,42 @@ public class IndexSecuencial {
             
         }
     }
+        
     //usuario lo obtengo obteniendo el reg_inicio, usuario asociado obtener mediante form
     //posicion [2]
     public boolean escribir(String[] usuario, String[] usuarioAsociado,int primero,int posicion) throws IOException
     {
-        switch (comparar(usuarioAsociado[posicion],usuario[posicion])) {
+        File file = new File("C:\\MEIA\\indice_lista_usuario.txt");
+        
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        if(datos.isEmpty()) {
+          FileWriter Escribir = new FileWriter(file,false);
+          BufferedWriter bw = new BufferedWriter(Escribir);
+          
+          bw.append("1");
+          bw.append("|");
+          bw.append("1.1");
+          bw.append("|");
+          bw.append(usuarioAsociado[2]);//nombre de la lista
+          bw.append("|");
+          bw.append(usuarioAsociado[3]); //usuario
+          bw.append("|");
+          bw.append(usuarioAsociado[4]);//usuario asociado
+          bw.append("|");
+          bw.append("-1"); //apuntador
+          bw.append("|");
+          bw.append("1"); //status
+          bw.append("|");
+          bw.close();
+          ModificarDesc();   
+          return true;
+        }
+        else {
+            switch (comparar(usuarioAsociado[posicion],usuario[posicion])) {
             case 0:
                 posicion = posicion+1;
                 return escribir(usuario,usuarioAsociado,primero,posicion);
@@ -147,11 +243,10 @@ public class IndexSecuencial {
                 {
                     
                     usuarioAsociado[5] = usuario[0];
-                    
                     IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
                     IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]); 
-                 
                     BorrarLineas(usuario[0],usuarioAsociado[0],miLista.ToString(),miLista2.ToString());
+                    ModificarDescIndice(usuarioAsociado[0]);
                 }
                 else
                 {
@@ -160,20 +255,18 @@ public class IndexSecuencial {
                     usuarioAsociado[5] = usuario[0];
                     IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(anterior[0]),anterior[1],anterior[2],anterior[3],anterior[4],Integer.valueOf(anterior[5]),anterior[6]);
                     IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
-                    BorrarLineas2(anterior[0],miLista.ToString(),miLista2.ToString());
-                    
-                    
+                    BorrarLineas2(anterior[0],miLista.ToString(),miLista2.ToString());         
+                    ModificarDesc();  
                 }
                 return false;
             case 2:
                 if (Integer.valueOf(usuario[5])==-1) 
                 {
-                    String[] anterior = buscar("C:\\MEIA\\indice_lista_usuario.txt",usuario[0]);
                     usuario[5] = usuarioAsociado[0];
-                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(anterior[0]),anterior[1],anterior[2],anterior[3],anterior[4],Integer.valueOf(anterior[5]),anterior[6]);
+                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
                     IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
-                    vaciarArchivo();
                     BorrarLineas(usuario[0],usuarioAsociado[0],miLista.ToString(),miLista2.ToString());
+                    ModificarDesc();   
                     return false;
                 }
                 else
@@ -185,6 +278,7 @@ public class IndexSecuencial {
             default:
                 return false;
         }
+       }
     }
     
     public void agregar(String[] usuarioAgregar) throws IOException
@@ -246,7 +340,7 @@ public class IndexSecuencial {
         {
             return null;
         }
-    }   
+    }  
     
     public String quitarCaracteres(String textoEntero)
     {
@@ -268,9 +362,13 @@ public class IndexSecuencial {
         String[] objeto2 = null;
         File Archivo = new File(path);
         BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
+        List<String> datos = br2.lines().collect(Collectors.toList());
         String last = br2.readLine(); 
-        while (last != null) 
-        { 
+        
+        if(datos.size() > 1){
+            
+          while (last != null) 
+           { 
             String[] objeto= last.split("\\|");
             String nuevo = quitarCaracteres(objeto[5]);
             if (nuevo.equals(siguiente)) {
@@ -278,7 +376,13 @@ public class IndexSecuencial {
             }
             
             last = br2.readLine(); 
-        } 
+           }
+        }
+        else {
+            String line = datos.get(0);
+            objeto2 = line.split("\\|");
+        }
+        
         br2.close();
         return retorno(objeto2);
     }
@@ -411,7 +515,7 @@ public class IndexSecuencial {
       * @return
       * @throws IOException 
       */ 
-    private static boolean ModificarDescIndice(String numReg, int listaSize, int regAct, int regInact) throws IOException{
+    private boolean ModificarDescIndice(String numReg) throws IOException{
         
         String path = "C:\\MEIA\\desc_indice_lista_usuario.txt";
         FileReader fr = new FileReader(path);
@@ -420,22 +524,35 @@ public class IndexSecuencial {
         List<String> datos = br.lines().collect(Collectors.toList());
         br.close();
         
-        String[] datosArray = (String[]) datos.toArray();
+        String[] override = datos.get(1).trim().split(": ");
+        numReg = override[1];
         
-        String[] override = datosArray[1].trim().split(":");
-        override[1] = numReg;
+         List<String> miLista = new ArrayList<>();
+            File Archivo = new File("C:\\MEIA\\indice_lista_usuario.txt");
+            BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
+            String last = br2.readLine(); 
+            while (last != null) 
+            { 
+                miLista.add(last);
+                last = br2.readLine(); 
+            } 
+            br2.close();
+        
+        int activos = countActives(miLista); 
+        int inActivos = countDeActives(miLista); 
+        int total = activos + inActivos; 
         
         File file = new File(path);
         FileWriter fw = new FileWriter(file);
         BufferedWriter bw = new BufferedWriter(fw);
         
-        bw.write("Num_reg: " + listaSize);
+        bw.write("Num_reg: " + total);
         bw.write("\r\n");
-        bw.write("Reg_inicio: " + override[1]);
+        bw.write("Reg_inicio: " + numReg);
         bw.write("\r\n");
-        bw.write("reg_activos: "+ regAct);
+        bw.write("reg_activos: "+ activos);
         bw.write("\r\n");
-        bw.write("Reg_inact: " + regInact);
+        bw.write("Reg_inact: " + inActivos);
             
         bw.flush();
         bw.close();
@@ -444,16 +561,67 @@ public class IndexSecuencial {
         
     }
     
-    public int UltimoRegistro() throws IOException{
+    private boolean ModificarDesc() throws IOException{
         
         String path = "C:\\MEIA\\desc_indice_lista_usuario.txt";
+        FileReader fr = new FileReader(path);
+        BufferedReader br = new BufferedReader(fr);
+        String numReg;
+        List<String> datos = br.lines().collect(Collectors.toList());
+        br.close();
+        
+        String[] override = datos.get(1).trim().split(": ");
+        numReg = override[1];
+        
+         List<String> miLista = new ArrayList<>();
+         File Archivo = new File("C:\\MEIA\\indice_lista_usuario.txt");
+         BufferedReader br2 = new BufferedReader(new FileReader(Archivo));
+         String last = br2.readLine(); 
+         while (last != null) 
+           { 
+              miLista.add(last);
+             last = br2.readLine(); 
+           } 
+          br2.close();
+        
+        int activos = countActives(miLista); 
+        int inActivos = countDeActives(miLista); 
+        int total = activos + inActivos; 
+        
+        File file = new File(path);
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("Num_reg: " + total);
+        bw.write("\r\n");
+        bw.write("Reg_inicio: " + numReg);
+        bw.write("\r\n");
+        bw.write("reg_activos: "+ activos);
+        bw.write("\r\n");
+        bw.write("Reg_inact: " + inActivos);
+            
+        bw.flush();
+        bw.close();
+        
+        return true;
+        
+    }
+    
+    public String UltimoRegistro() throws IOException{
+        
+        String path = "C:\\MEIA\\indice_lista_usuario.txt";
         FileReader fr = new FileReader(path);
         BufferedReader br = new BufferedReader(fr);
         
         List<String> datos = br.lines().collect(Collectors.toList());
         br.close();
         
-        return datos.size() + 1;
+        if(datos.isEmpty()) {
+            return "0|1.0| | | |1|1";
+        }
+        else {
+            return datos.get(datos.size()-1);
+        }
         
     }
     

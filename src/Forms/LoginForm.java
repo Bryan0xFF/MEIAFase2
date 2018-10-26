@@ -5,6 +5,7 @@
  */
 package Forms;
 
+import Classes.IndexSecuencial;
 import Classes.SecIndizado;
 import Classes.Secuencial;
 import Classes.Usuario;
@@ -22,7 +23,7 @@ public class LoginForm extends javax.swing.JFrame {
     
     
     Secuencial secuencial; 
-    SecIndizado secuencialIndex;
+    IndexSecuencial indexSecuencial;
     public static Usuario newUser = new Usuario(); 
     
      
@@ -150,7 +151,8 @@ public class LoginForm extends javax.swing.JFrame {
         newUser = secuencial.ObtenerUsuario(user, "usuario");
         secuencial = new Secuencial("lista",tfUsuario.getText() ,"5");
         secuencial = new Secuencial("lista_usuario",tfUsuario.getText() ,"5");
-          
+        indexSecuencial = new IndexSecuencial(); 
+        
             if(password.equals(newUser.getPassword()) && user.equals(newUser.getUsuario())) {                
              switch (newUser.getRol()) {
                 case 0:

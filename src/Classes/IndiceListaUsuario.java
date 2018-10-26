@@ -38,6 +38,7 @@ public class IndiceListaUsuario {
         }
     return pad.substring(str.length()) + str;
     }
+    
     public IndiceListaUsuario()
     {
         this.numRegistro =0;
@@ -59,9 +60,7 @@ public class IndiceListaUsuario {
         this.usuarioAsociado = userAsociate;
         this.Siguiente = next;
         this.status = status;
-    }
-        
-        
+    }        
         
         
         public String ConvertirATextoTamañoFijo()

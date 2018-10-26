@@ -218,7 +218,7 @@ public class Lista {
          
          int count = 0; //sirve para offset
          
-         int FixedSize = tamanio + 3;
+         int FixedSize = tamanio;
          
          List<String> datosTemp = br.lines().collect(Collectors.toList());
          

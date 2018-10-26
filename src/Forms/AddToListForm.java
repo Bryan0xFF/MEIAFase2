@@ -182,19 +182,20 @@ public class AddToListForm extends javax.swing.JFrame {
               
               Lista_Usuario listaUsuario = new Lista_Usuario(nombreLista, user.getUsuario(), nombreAsociado, lista.descripcion);
               
-              int ultimoReg = index.UltimoRegistro();
-              String bloque = "1." + Integer.toString(ultimoReg);
+              String ultimoReg = index.UltimoRegistro();
+              String num = String.valueOf(ultimoReg.charAt(0));
+              String bloque = "1." + num;
               String nombreListaAdd = nombreLista;
               String usuarioMaster = user.getUsuario();
               String usuarioAsc = asociado.getUsuario();
               int siguiente = -1;
               String status = "1";
               
-              IndiceListaUsuario temp = new IndiceListaUsuario(ultimoReg, bloque, nombreListaAdd, usuarioMaster, usuarioAsc, siguiente, status);
+              IndiceListaUsuario temp = new IndiceListaUsuario(Integer.valueOf(num), bloque, nombreListaAdd, usuarioMaster, usuarioAsc, siguiente, status);
               String usuarioCrear = temp.ToString();
               String[] split = usuarioCrear.split("\\|");
               
-              index.escribir(indiceListaUsuario.obtenerUsuarioSplit(), split,Integer.parseInt(IndexSecuencial.ObtenerInicio()), 2);
+              index.escribir(ultimoReg.split("\\|"), split,Integer.parseInt(IndexSecuencial.ObtenerInicio()), 2);
               JOptionPane.showMessageDialog(null, "El usuario: " + nombreAsociado + " se ha agregado a la lista: " + nombreLista, "Agregar",WIDTH);  
             }
             else if (!asociado.equals(user)){
