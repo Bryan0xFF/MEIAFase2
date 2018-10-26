@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
  */
 public class IndiceListaUsuario {
     
-     int numRegistro;
-     String numBloque;
-     String nombreLista;
-     String usuario;
-     String usuarioAsociado;
-     int Siguiente;
-     String status;
+     public int registro;
+     public String posicion;
+     public String nombreLista;
+     public String usuario;
+     public String usuarioAsociado;
+     public int siguiente;
+     public String status;
      
      
     public static String padLeft(String str, int length, String padChar) 
@@ -41,35 +41,46 @@ public class IndiceListaUsuario {
     
     public IndiceListaUsuario()
     {
-        this.numRegistro =0;
-        this.numBloque ="";
+        this.registro =0;
+        this.posicion ="";
         this.nombreLista ="";
         this.usuario ="";
         this.usuarioAsociado = "";
-        this.Siguiente = 0;
+        this.siguiente = 0;
         this.status = "";
         
     }
 
-    public IndiceListaUsuario(int registro, String bloque, String lista, String user, String userAsociate, int next, String status)
+    public IndiceListaUsuario(int registro, String posicion, String lista, String user, String userAsociate, int next, String status)
     {
-        this.numRegistro =registro;
-        this.numBloque =bloque;
-        this.nombreLista =lista;
-        this.usuario =user;
+        this.registro = registro;
+        this.posicion = posicion;
+        this.nombreLista = lista;
+        this.usuario = user;
         this.usuarioAsociado = userAsociate;
-        this.Siguiente = next;
+        this.siguiente = next;
         this.status = status;
-    }        
+    }  
+    
+    public IndiceListaUsuario(String[] linea)
+    {        
+        this.registro = Integer.valueOf(linea[0]);
+        this.posicion = linea[1];
+        this.nombreLista = linea[2];
+        this.usuario = linea[3];
+        this.usuarioAsociado = linea[4];
+        this.siguiente = Integer.valueOf(linea[5]);
+        this.status = linea[6];
+    }  
         
         
-        public String ConvertirATextoTamañoFijo()
-        {
+    public String ConvertirATextoTamañoFijo()
+    {
             StringBuilder sb = new StringBuilder();
 
-            sb.append(numRegistro);
+            sb.append(registro);
             sb.append("|");
-            sb.append(numBloque);
+            sb.append(posicion);
             sb.append("|");
             sb.append(nombreLista);
             sb.append("|");
@@ -77,18 +88,38 @@ public class IndiceListaUsuario {
             sb.append("|");
             sb.append(usuarioAsociado);
             sb.append("|");
-            sb.append(Siguiente);
+            sb.append(siguiente);
             sb.append("|");
             sb.append(status);
             return sb.toString();
-        }
+    }
+    
+    public String ConvertirATextoTamañoFijo(String[] linea)
+    {
+            StringBuilder sb = new StringBuilder();
 
-       
+            sb.append(linea[0]);
+            sb.append("|");
+            sb.append(linea[1]);
+            sb.append("|");
+            sb.append(linea[2]);
+            sb.append("|");
+            sb.append(linea[3]);
+            sb.append("|");
+            sb.append(linea[4]);
+            sb.append("|");
+            sb.append(linea[5]);
+            sb.append("|");
+            sb.append(linea[6]);
+            return sb.toString();
+    }
+    
+    
 
-        public String ToString()
-        {
+    public String ToString()
+    {
             return ConvertirATextoTamañoFijo();
-        }
+    }
         
     public String[] obtenerUsuarioSplit() throws IOException{
         

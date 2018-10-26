@@ -79,6 +79,8 @@ public class AddToListForm extends javax.swing.JFrame {
         List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(List);
 
+        tfUsuario.setText("cluna");
+
         lblListas.setText("Listas creadas:");
 
         lblUsuario.setText("Usuario a agregar:");

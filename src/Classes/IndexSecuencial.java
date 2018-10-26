@@ -210,7 +210,8 @@ public class IndexSecuencial {
         BufferedReader br = new BufferedReader(fr);
         List<String> datos = br.lines().collect(Collectors.toList());
         br.close();
-        
+        TablaIndices tabla = new TablaIndices(); 
+                
         if(datos.isEmpty()) {
           FileWriter Escribir = new FileWriter(file,false);
           BufferedWriter bw = new BufferedWriter(Escribir);
@@ -230,55 +231,111 @@ public class IndexSecuencial {
           bw.append("1"); //status
           bw.append("|");
           bw.close();
-          ModificarDesc();   
-          return true;
+          ModificarDesc();    
+          return true; 
         }
         else {
-            switch (comparar(usuarioAsociado[posicion],usuario[posicion])) {
-            case 0:
-                posicion = posicion+1;
-                return escribir(usuario,usuarioAsociado,primero,posicion);
-            case 1:
-                if (primero==Integer.valueOf(usuario[0]))
-                {
-                    
-                    usuarioAsociado[5] = usuario[0];
-                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
-                    IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]); 
-                    BorrarLineas(usuario[0],usuarioAsociado[0],miLista.ToString(),miLista2.ToString());
-                    ModificarDescIndice(usuarioAsociado[0]);
-                }
-                else
-                {
-                    String[] anterior = buscar("C:\\MEIA\\indice_lista_usuario.txt",usuario[0]);
-                    anterior[5] = usuarioAsociado[0];
-                    usuarioAsociado[5] = usuario[0];
-                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(anterior[0]),anterior[1],anterior[2],anterior[3],anterior[4],Integer.valueOf(anterior[5]),anterior[6]);
-                    IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
-                    BorrarLineas2(anterior[0],miLista.ToString(),miLista2.ToString());         
-                    ModificarDesc();  
-                }
-                return false;
-            case 2:
-                if (Integer.valueOf(usuario[5])==-1) 
-                {
-                    usuario[5] = usuarioAsociado[0];
-                    IndiceListaUsuario miLista  = new IndiceListaUsuario(Integer.valueOf(usuario[0]),usuario[1],usuario[2],usuario[3],usuario[4],Integer.valueOf(usuario[5]),usuario[6]);
-                    IndiceListaUsuario miLista2  = new IndiceListaUsuario(Integer.valueOf(usuarioAsociado[0]),usuarioAsociado[1],usuarioAsociado[2],usuarioAsociado[3],usuarioAsociado[4],Integer.valueOf(usuarioAsociado[5]),usuarioAsociado[6]);
-                    BorrarLineas(usuario[0],usuarioAsociado[0],miLista.ToString(),miLista2.ToString());
-                    ModificarDesc();   
-                    return false;
-                }
-                else
-                {
-                    usuario = apuntadorSiguiente(Integer.valueOf(usuario[5]));
-                    return escribir(usuario,usuarioAsociado,primero,posicion);
-                }
+            List<IndiceListaUsuario> listado = new ArrayList<>();
+            IndiceListaUsuario newElement;
+            int elementPosition = 0; 
+            for (int i = 0; i < datos.size(); i++) {
+                listado.add(new IndiceListaUsuario(datos.get(i).split("\\|")));
+            }
+            
+            
+            for (int i = 0; i < listado.size(); i++) {
                 
-            default:
-                return false;
-        }
+                
+                /////////////////////////////////////////////////////////
+                
+                switch (comparar(usuarioAsociado[posicion],usuario[posicion])) {
+                    case 0: //En caso sean iguales y busca un diferente parametro de comparacion
+                        posicion++; 
+                        return escribir(usuario,usuarioAsociado,primero,posicion);
+                    
+                    case 1: //En caso sea menor el elemento que se insertará
+                        elementPosition = getElement(usuarioAsociado, datos);                        
+                        tabla = getTabla(elementPosition, listado);
+                        
+                        //Solo hay un elemento en la tabla, se inserta involucrando la raiz
+                        if(tabla.previo == null && tabla.siguiente == null) {
+                           newElement = new IndiceListaUsuario(usuarioAsociado);
+                           newElement.siguiente = -1;
+                           newElement.registro = listado.size() + 1;
+                           listado.get(0).siguiente = 1;
+                        }
+                        
+                        //Se inserta al final del archivo
+                        if(tabla.previo != null && tabla.siguiente == null) {
+                           newElement = new IndiceListaUsuario(usuarioAsociado);
+                           newElement.siguiente = -1;
+                           listado.get(listado.size() - 1).siguiente = listado.size() + 1;
+                           newElement.registro = listado.size() + 1;
+                           listado.add(newElement);                             
+                        }
+                        
+                        //Se inserta en medio del archivo, involucrando dos elementos de la lista
+                        if(tabla.previo != null && tabla.siguiente != null) {
+                           newElement = new IndiceListaUsuario(usuarioAsociado);
+                           newElement.siguiente = -1;
+                           newElement.registro = listado.size() + 1; 
+                           listado.get(tabla.previo.registro-1).siguiente = newElement.registro;
+                           
+                        }
+                        
+                        
+                    
+                    case 2: //En caso sea mayor el elemento que se insertará     
+                }                
+            }
        }
+    }
+    
+    public TablaIndices getTabla (int elementPosition, List<IndiceListaUsuario> listado) {
+        TablaIndices tabla = new TablaIndices(); 
+        
+        if(elementPosition == 0) {
+           if(listado.size() == 1) {
+              tabla.actual = listado.get(0);
+              tabla.previo = null;
+              tabla.siguiente = null;
+           }
+            else {
+              tabla.actual = listado.get(0); 
+              tabla.siguiente = listado.get(1);
+              tabla.previo = null;
+            }
+        }
+         else if(elementPosition > 0) {
+                tabla.previo = listado.get(elementPosition -1);
+                tabla.actual = listado.get(elementPosition); 
+                tabla.siguiente = listado.get(elementPosition+1);
+                    
+          }
+          else if(elementPosition + 1 == listado.size()) {
+                tabla.previo = listado.get(elementPosition -1);
+                tabla.actual = listado.get(elementPosition); 
+                tabla.siguiente = null;
+          }
+        return tabla;                 
+    }
+    
+    public int getElement(String[] addingItem, List<String> lista) {
+        boolean flag = true;
+        int cont = 0;
+        IndiceListaUsuario comp = new IndiceListaUsuario(addingItem); 
+        String comparator = comp.ConvertirATextoTamañoFijo();
+        int result = 0;
+        
+        while(flag) {
+            if(!lista.get(cont).equals(comparator)) {
+                cont++;
+            }
+            else if(lista.get(cont).equals(comparator)) {
+                result = comparator.charAt(0);
+            }   
+        }
+        return result;
     }
     
     public void agregar(String[] usuarioAgregar) throws IOException
@@ -617,7 +674,7 @@ public class IndexSecuencial {
         br.close();
         
         if(datos.isEmpty()) {
-            return "0|1.0| | | |1|1";
+            return "1|1.1| | | |1|1";
         }
         else {
             return datos.get(datos.size()-1);
